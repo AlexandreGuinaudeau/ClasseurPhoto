@@ -1,0 +1,26 @@
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand active" href="/album/"><span class="glyphicon glyphicon-home"></span></a>
+        </div>
+        {% if name == "detail" %}
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="/album/{{album.permalink}}" class="dropdown-toggle" data-toggle="dropdown">
+                        {{album.name}} <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#" id="import-images">Import images</a></li>
+                        <!--<li class="divider"></li>-->
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/album/{{album.permalink}}/settings/"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</nav>

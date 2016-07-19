@@ -1,69 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-{% load static %}
-<head>
-    <meta charset="UTF-8">
-    <title>Album</title>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'album/styles.css' %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="{% static 'album/styles.js' %}"></script>
-</head>
-<body>
-
-<nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <a class="navbar-brand active" href="/album/"><span class="glyphicon glyphicon-home"></span></a>
-        </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav">
-                <li><a href="#">Album</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
 
 <div class="container-fluid text-center">
     <div class="row content">
         <div class="navbar navbar-inverse navbar-fixed-left">
             <ul class="nav navbar-nav">
-                <li class="btn btn-default btn-primary" id="new-album">
-                    <a style="color: #fff" href="#">
-                        <span class="glyphicon glyphicon-plus"></span> New Album
-                    </a>
+                <li class="btn btn-primary" id="new-album">
+                    <span class="glyphicon glyphicon-plus"></span> New Album
                 </li>
                 {% if album_list %}
-                <ul>
                     {% for album in album_list %}
-                    <li><a href="/album/{{ album.permalink }}/"><span class="glyphicon glyphicon-camera"></span> {{ album.name }}</a></li>
+                    <li>
+                        <a href="/album/{{ album.permalink }}/">
+                            <span class="glyphicon glyphicon-camera"></span> {{ album.name }}
+                        </a>
+                    </li>
                     {% endfor %}
-                </ul>
                 {% endif %}
             </ul>
         </div>
     </div>
 </div>
-
-<div id="body-layer">
-    <div class="center-form">
-        <form role="form">
-            <div class="form-group">
-                <label>Project name:</label>
-                <input type="text" class="form-control" id="name">
-            </div>
-            <div class="form-group">
-                <label>Permalink:</label>
-                <input type="url" class="form-control" id="permalink">
-            </div>
-            <button type="submit" class="btn btn-default">Create Album</button>
-        </form>
-    </div>
-</div>
-
-</body>
-</html>

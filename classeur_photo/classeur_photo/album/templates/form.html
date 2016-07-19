@@ -1,0 +1,40 @@
+<div id="body-layer"></div>
+<div id="center-form">
+{% if name == "index" %}
+    <form role="form" action="/album/create/" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.album_name.id_for_label }}">Album name:</label>
+            {{ form.album_name }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.permalink.id_for_label }}">Permalink:</label>
+            {{ form.permalink }}
+        </div>
+        <button type="submit" class="btn btn-primary vertical-center" id="create-album">Create Album</button>
+    </form>
+{% elif name == "detail" %}
+    <form role="form" action="/album/{{ album.permalink }}/import/" method="post">
+        {% csrf_token %}
+
+        <div class="btn-group vertical-center" data-toggle="buttons">
+            <div class="btn btn btn-default radio-inline-btn" id="select_folder">
+                Folder
+            </div>
+            <div class="btn btn-default radio-inline-btn" id="select_url">
+                URL
+            </div>
+        </div>
+
+        <div class="form-group" id="url-div">
+            <label for="{{ form.url_path.id_for_label }}">URL:</label>
+            {{ form.url_path }}
+        </div>
+        <div class="form-group" id="folder-div">
+            <label for="{{ form.folder_path.id_for_label }}">Folder:</label>
+            {{ form.folder_path }}
+        </div>
+        <button type="submit" class="btn btn-primary vertical-center" id="import-submit">Import</button>
+    </form>
+{% endif %}
+</div>
