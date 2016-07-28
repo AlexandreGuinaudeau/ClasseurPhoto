@@ -3,6 +3,7 @@ $("document").ready(function() {
     // set Variables
     var body_layer = $("#body-layer");
     var center_form = $("#center-form");
+    var welcome_button = $("#welcome");
 
     var new_album_button = $("#new-album");
     var album_name_input = $("#id_album_name");
@@ -10,14 +11,9 @@ $("document").ready(function() {
     var permalink_edited = false;
     var create_album = $("#create-album");
 
-    var import_images_button = $("#import-images")
-    var import_url_input = $("#id_url_path");
-    var import_folder_input = $("#id_folder_path");
-    var import_url_div = $("#url-div");
-    var import_folder_div = $("#folder-div");
-    var import_url_selected = $("#select_url");
-    var import_folder_selected = $("#select_folder");
-    var import_submit = $("#import-submit");
+    var image_list = $(".thumb");
+
+    var main_body = $("#main-body");
 
     // define functions
     function get_permalink(name){
@@ -28,19 +24,66 @@ $("document").ready(function() {
     }
 
     // set initial properties
+    if (welcome_button.length !== 0){
+        return;
+    }
+
     body_layer.hide();
     center_form.hide();
-    import_url_div.hide();
-    import_folder_selected.focus();
 
     // set event handlers
-    $(this).on("click", "#body-layer", function(evt) {  //listen for clicks
-        var target = $(evt.target ||evt.srcElement);  //get the element that was clicked on
-        if (target.is("#body-layer")) {  //make sure it was not a child that was clicked.
+    body_layer.on({
+        "drop": function(e){
+            e.stopPropagation();
+            e.preventDefault();
             body_layer.fadeOut();
-            center_form.fadeOut();
+            if (window.File && window.FileReader && window.FileList && window.Blob) {
+              // alert("Great success! All the File APIs are supported.");
+            } else {
+              alert('The File APIs are not fully supported in this browser.');
+            }
+
+            var files = e.originalEvent.dataTransfer.files;
+
+            for (var i = 0, f; f = files[i]; i++) { // iterate in the files dropped
+                if (f.type.startsWith('image')) {
+                    // Get file
+                    var reader = new FileReader();
+
+                    // Closure to capture the file information.
+                    reader.onload = (function(theFile) {
+                    return function(e) {
+                        // Render thumbnail.
+                        var span = document.createElement('span');
+                        span.innerHTML = ['<img class="thumb" src="', e.target.result,
+                                          '" title="', escape(theFile.name), '"/>'].join('');
+                        document.getElementById('list').insertBefore(span, null);
+                    };
+                    })(f);
+
+                    // Read in the image file as a data URL.
+                    reader.readAsDataURL(f);
+                } else if (!f.type) {
+                    alert("You cannot directly drag a folder.");
+                }
+            }
+        },
+        "dragover": function(e){
+            e.stopPropagation();
+            e.preventDefault();
+        },
+        "dragend": function(e){
+            if (e.target.id == "body-layer"){
+                body_layer.fadeOut();
+            }
+        },
+        "click": function(e){
+            if (e.target.id == "body-layer"){
+                body_layer.fadeOut();
+                center_form.fadeOut();
+            }
         }
-    });
+    })
 
     // Create Album
     new_album_button.on({
@@ -79,34 +122,26 @@ $("document").ready(function() {
     });
 
     // Import Images
-    import_images_button.on({
-        "click": function(){
-            import_url_input.val("");
-            import_folder_input.val("");
+
+    main_body.on({
+        "dragenter": function(e){
             body_layer.fadeIn();
-            center_form.fadeIn();
+        },
+        "dragover": function(e){
+            e.stopPropagation();
+            e.preventDefault();
+        },
+        "dragend": function(e){
+            body_layer.fadeOut();
         }
+    })
+
+    //Display Images as cropped squares
+    image_list.each(function() {
+      if ($(this).width() > $(this).height()) {
+        $(this).addClass('landscape');
+      }
     });
 
-    import_url_selected.on({
-        "click": function(){
-            import_url_div.show();
-            import_folder_div.hide();
-            import_submit.show();
-            import_url_input.val("");
-            import_folder_input.val("");
-        }
-    });
-
-    import_folder_selected.on({
-        "click": function(){
-            import_url_div.hide();
-            import_folder_div.show();
-            import_submit.show();
-            import_url_input.val("");
-            import_folder_input.val("");
-        }
-    });
-
-
+    // http://www.html5rocks.com/en/tutorials/file/dndfiles/
 });

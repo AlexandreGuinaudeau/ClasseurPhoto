@@ -1,6 +1,25 @@
 <div id="body-layer"></div>
 <div id="center-form">
-{% if name == "index" %}
+{% if name == "welcome" %}
+    <div class="vertical-center"><h2>Welcome!</h2></div>
+        <div style="color: gray"><p>Please set the folder where you want to store your photos.</p></div>
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <span{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</span><br>
+            {% endfor %}
+        </div>
+        {% endif %}
+    <form role="form" action="/album/welcome/" method="post">
+        {% csrf_token %}
+        <div>
+            <label for="{{ form.local_folder.id_for_label }}">Local folder path:</label>
+            {{ form.local_folder }}
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary vertical-center" id="welcome">Set path</button>
+    </form>
+{% elif name == "index" %}
     <form role="form" action="/album/create/" method="post">
         {% csrf_token %}
         <div class="form-group">
@@ -12,29 +31,6 @@
             {{ form.permalink }}
         </div>
         <button type="submit" class="btn btn-primary vertical-center" id="create-album">Create Album</button>
-    </form>
-{% elif name == "detail" %}
-    <form role="form" action="/album/{{ album.permalink }}/import/" method="post">
-        {% csrf_token %}
-
-        <div class="btn-group vertical-center" data-toggle="buttons">
-            <div class="btn btn btn-default radio-inline-btn" id="select_folder">
-                Folder
-            </div>
-            <div class="btn btn-default radio-inline-btn" id="select_url">
-                URL
-            </div>
-        </div>
-
-        <div class="form-group" id="url-div">
-            <label for="{{ form.url_path.id_for_label }}">URL:</label>
-            {{ form.url_path }}
-        </div>
-        <div class="form-group" id="folder-div">
-            <label for="{{ form.folder_path.id_for_label }}">Folder:</label>
-            {{ form.folder_path }}
-        </div>
-        <button type="submit" class="btn btn-primary vertical-center" id="import-submit">Import</button>
     </form>
 {% endif %}
 </div>

@@ -10,6 +10,12 @@ class NewAlbumForm(forms.Form):
                                                               'type': 'text'}))
 
 
+class WelcomeForm(forms.Form):
+    local_folder = forms.CharField(label='Local Folder', max_length=200,
+                                   widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                 'type': 'text'}))
+
+
 class ImportImagesForm(forms.Form):
     url_path = forms.URLField(required=False,
                               widget=forms.TextInput(attrs={'class': 'form-control', 'type': 'url'}))
